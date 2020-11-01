@@ -1,4 +1,4 @@
-package xszaraz;
+package xszaraz_vinf;
 
 public class DbpediaTextSummarize {
 
@@ -41,7 +41,7 @@ public class DbpediaTextSummarize {
 				.replace("%F0", "ð").replace("%F1", "ñ").replace("%F2", "ò").replace("%F3", "ó")
 				.replace("%F4", "ô").replace("%F5", "õ").replace("%F6", "ö").replace("%F7", "÷")
 				.replace("%F8", "ø").replace("%F9", "ù").replace("%FA", "ú").replace("%FB", "û")
-				.replace("%FC", "ü").replace("%FD", "ý").replace("%FE", "þ").replace("%FF", "ÿ");
+				.replace("%FC", "ü").replace("%FD", "ý").replace("%FE", "þ").replace("%FF", "ÿ").replace("_", " ");
 		
 		return title;
 	}
