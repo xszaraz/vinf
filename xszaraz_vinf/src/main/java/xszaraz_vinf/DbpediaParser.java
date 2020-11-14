@@ -39,54 +39,31 @@ public class DbpediaParser {
 	
 	public static class Map extends Mapper<LongWritable, Text, Text, Text> {
 
-	    public void setup(Context context) throws IOException, InterruptedException{
-	        Path pt=new Path("D:\\STU_FIIT\\Inzinierske_studium\\3semester\\VINF\\shortabstract_en.nt");
-	        FileSystem fs = FileSystem.get(new Configuration());
-	        BufferedReader br=new BufferedReader(new InputStreamReader(fs.open(pt)));
-	        String line;
-	        line=br.readLine();
+		protected void map(LongWritable key, Text value, Mapper.Context context) throws IOException, InterruptedException{
+			String document = value.toString();
+			
     		String title = "";
     		String abstrakt = "";
-	        while (line != null){
-	    		String[] texts = line.split("> ");	
-	    		//texts[0] = titul
-	    		title = summarizer.SummarizeTitle(texts[0]);	
-	    		//texts[2] = abstrakt
-	    		abstrakt = summarizer.SummarizeAbstract(texts[2]);
-	            System.out.println("title: " + title + ", abstrakt: " + abstrakt);
-	            line=br.readLine();
-	            context.write(new Text(title), new Text(abstrakt));
-	        }
+
+	    	String[] texts = document.split("> ");	
+	    	//texts[0] = titul
+	    	title = summarizer.SummarizeTitle(texts[0]);	
+	    	//texts[2] = abstrakt
+	    	abstrakt = summarizer.SummarizeAbstract(texts[2]);
+	        System.out.println("title: " + title + ", abstrakt: " + abstrakt);
+	        context.write(new Text(title), new Text(abstrakt));
 	    }		
 	}
 	
 	public static class Reduce extends Reducer<Text, Text, Text, Text> {
-
-	    @Override
-	    protected void setup(Context context) throws IOException, InterruptedException {
-	        context.write(new Text("<dbpedia>"), null);
-	    }
-
-	    @Override
-	    protected void cleanup(Context context) throws IOException, InterruptedException {
-	        context.write(new Text("</dbpedia>"), null);
-	    }
-
-	    private Text outputKey = new Text();
-	    
+    
 	    public void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
+	    	String result="";
 	        for (Text value : values) {
-		        outputKey.set(constructPropertyXml(key, value));
-		        context.write(outputKey, null);		
+		        result += value;	
 	        }
-	    }
-
-	    public static String constructPropertyXml(Text title, Text abstrakt) {
-	        StringBuilder sb = new StringBuilder();
-	        sb.append("<property><title>").append(title)
-	        .append("</title><abstrakt>").append(abstrakt)
-	        .append("</abstrakt></property>");
-	        return sb.toString();
+	        
+	        context.write(key, new Text(result));	
 	    }
 	}
 
@@ -101,9 +78,9 @@ public class DbpediaParser {
 	        job.setReducerClass(DbpediaParser.Reduce.class);
 
 	        job.setInputFormatClass(TextInputFormat.class);
-	        job.setOutputFormatClass(TextOutputFormat.class);
+	        job.setOutputFormatClass(XMLOutputFormat.class);
 
-	        FileInputFormat.addInputPath(job, new Path("D:\\STU_FIIT\\Inzinierske_studium\\3semester\\VINF\\shortabstract_en.nt"));
+	        FileInputFormat.addInputPath(job, new Path("D:\\STU_FIIT\\Inzinierske_studium\\3semester\\VINF\\Untitled-2.nt"));
 	        FileOutputFormat.setOutputPath(job, new Path("D:\\STU_FIIT\\Inzinierske_studium\\3semester\\VINF\\dbpediaoutput"));
 	        
 	        job.setJarByClass(DbpediaParser.class);     

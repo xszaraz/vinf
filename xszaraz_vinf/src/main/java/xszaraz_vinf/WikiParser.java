@@ -235,7 +235,7 @@ public class WikiParser {
             job.setInputFormatClass(XmlInputFormat1.class);
             job.setOutputFormatClass(TextOutputFormat.class);         
 
-            FileInputFormat.addInputPath(job, new Path("D:\\STU_FIIT\\Inzinierske_studium\\3semester\\VINF\\enwiki-latest-pages-articles.xml"));
+            FileInputFormat.addInputPath(job, new Path("D:\\STU_FIIT\\Inzinierske_studium\\3semester\\VINF\\test.xml"));
             FileOutputFormat.setOutputPath(job, new Path("D:\\STU_FIIT\\Inzinierske_studium\\3semester\\VINF\\WikiOutput"));
 
             job.waitForCompletion(true);
