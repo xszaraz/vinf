@@ -143,13 +143,7 @@ public class WikiTextSummarize {
 	
 	public String Summarize(String text, int maxSummarySize)
 	{
-		//ak je to presmerovane, tak to skipnem
-		if(text.contains("#REDIRECT "))
-		{
-			String msg = "Skip";
-			return msg;
-		}
-		
+		System.out.println("WIKIPEDIA PARSING");
 		//regexy na zbavenie sa veci, ktore ma nezaujimaju
 		text = text.replaceAll("==.*==", "").replaceAll("\\&lt\\;\\!\\-\\-[[[a-z]*[A-Z]*[0-9]*\\_*\\/*\\ *\\'*\\\"*\\=*\\-*\\–*á*Á*é*É*í*Í*¾*¼*š*Š*è*È***ž*Ž*ý*Ý*\\;*\\:*\\.*\\,*\\!*\\?*\\@*\\#*\\$*\\%*\\&*\\^*\\**\\(*\\)*\\~*\\]\\[*]*\\|*]*\\-\\-\\&gt\\;","").replace("[...] ", "").replace("&quot", "\"")
 				.replaceAll("\\{\\{[[[a-z]*[A-Z]*[0-9]*\\_*\\/*\\ *\\'*\\\"*\\=*\\-*\\–*á*Á*é*É*í*Í*¾*¼*š*Š*è*È***ž*Ž*ý*Ý*\\;*\\:*\\.*\\,*\\!*\\?*\\@*\\#*\\$*\\%*\\&*\\^*\\**\\(*\\)*\\~*\\]\\[*]*\\|*]*\\}\\}", "")
@@ -160,20 +154,24 @@ public class WikiTextSummarize {
 				.replaceAll("http:\\/\\/[[a-z]*[A-Z]*[0-9]*\\_*\\/*\\ *\\'*\\\\\"*\\=*\\-*\\–*á*Á*é*É*í*Í*¾*¼*š*Š*è*È***ž*Ž*ý*Ý*\\;*\\:*\\.*\\,*\\!*\\?*\\@*\\#*\\$*\\%*\\^*\\**\\*\\~*\\[*\\]*\\(*\\)*\\|*]*\\&lt\\;", "&lt;")
 				.replaceAll("\\&lt\\;\\/*ref[[a-z]*[A-Z]*[0-9]*\\_*\\/*\\ *\\'*\\\"*\\=*\\-*\\–*á*Á*é*É*í*Í*¾*¼*š*Š*è*È***ž*Ž*ý*Ý*\\;*\\:*\\.*\\,*\\!*\\?*\\@*\\#*\\$*\\%*\\^*\\**\\*\\~*\\[*\\]*\\(*\\)*\\|*]*\\&gt\\;", "")
 				.replaceAll("\\&lt\\;\\/*math[[a-z]*[A-Z]*[0-9]*\\_*\\/*\\ *\\'*\\\"*\\=*\\-*\\–*á*Á*é*É*í*Í*¾*¼*š*Š*è*È***ž*Ž*ý*Ý*\\;*\\:*\\.*\\,*\\!*\\?*\\@*\\#*\\$*\\%*\\^*\\**\\*\\~*\\[*\\]*\\(*\\)*\\|*]*\\&gt\\;", "")
+				.replaceAll("\\{\\{sfn[[a-z]*[A-Z*][0-9]*\\|*Ã*©*=*\"* *\\¡*â*]*\\}\\}","")
 				.replace("() ", "").replace("[", "").replace("]","").replaceAll("p\\.\\ [0-9]*\\.", "p*.").replace("i.e.", "i*e*")/**/;
 
-		String[] textSentences = text.split("\r\n");
+		String[] textSentences = text.split("\n");
 		String cleanedText = "";
+		
+		System.out.println("text: ");
 		
 		//zbavim sa infoboxu
 		for (String sentence : textSentences) {
 			sentence = sentence.replaceAll("^!", "|");
+			System.out.println(sentence);
 			if (!sentence.contains("|") & !sentence.contains("Infobox")) 
 			{
-			cleanedText = cleanedText + "\n"+ sentence;
+				cleanedText = cleanedText + "\n"+ sentence;
 			}
 		}
-			
+		
 		//zbavim sa nasledovnych znakov, ktore hovoria o fomatovani textu alebo tieto znaky iba upravim na nieco ine 
 		cleanedText = cleanedText.replace(".", ". ").replace("*", "").replace("'''","")
 				.replace("''","").replace("--&gt", "").replace(";","").replace("&lt!--", "").replace("&lt;/ref", "").
@@ -216,6 +214,8 @@ public class WikiTextSummarize {
 	
 		//znaky ktore som povodne menil aby som mohol rozdelit vetu bodka ., vratim na povodne
 		summary = summary.replace("i*e*", "i.e.").replace(". ", ".").replace(".  ", ". ").replaceAll("\\ +", " ");
+		
+		System.out.println("Result from parsing: "+summary);
 		
 		return summary;	
 	}

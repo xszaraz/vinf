@@ -165,9 +165,18 @@ public class WikiParser {
 	                }
 	            }
 	            reader.close();
-	            context.write(new Text(propertyName), new Text(propertyValue));
-	            System.out.println("propertyName: "+propertyName);
-	          //System.out.println("propertyValue: "+propertyValue);
+	            
+	            String textToBeSplitted = "";
+		    	String result = "";
+
+				if (!propertyValue.contains("#REDIRECT")) {				
+	                textToBeSplitted = propertyValue.replaceAll("==\\ *See also\\ *==", "==See also==");
+	                //splitnem text podla See also, pretoze pod See also su iba referencie co ma pri abstrakte nezaujima
+	    			String[] texts = textToBeSplitted.split("==See also=="); 
+	    			result = summarizer.Summarize(texts[0], 2048);
+	    			    			
+					context.write(new Text(propertyName.trim()), new Text(result.trim()));
+				}            
 	        }
 	        catch(Exception e){
 	            throw new IOException(e);
@@ -175,48 +184,8 @@ public class WikiParser {
 	    }
 	}
 	
-	public static class Reduce extends Reducer<Text, Text, Text, Text> {
-	    private Text outputKey = new Text();
-		
-	    @Override
-	    protected void setup(Context context) throws IOException, InterruptedException {
-	        context.write(new Text("<mediawiki>"), null);
-	    }
-
-	    @Override
-	    protected void cleanup(Context context) throws IOException, InterruptedException {
-	        context.write(new Text("</mediawiki>"), null);
-	    }
-	    
-	    public void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
-	    	String textToBeSplitted = "";
-	    	String result = "";
-	        for (Text value : values) {
-	        	textToBeSplitted = "";
-	        	result = "";
-				if (!value.equals("Skip")) {
-					
-                	textToBeSplitted = value.toString().replaceAll("==\\ *See also\\ *==", "==See also==");
-                	//splitnem text podla See also, pretoze pod See also su iba referencie co ma pri abstrakte nezaujima
-    				String[] texts = textToBeSplitted.split("==See also=="); 
-    				result = summarizer.Summarize(texts[0], 2048);
-                    System.out.println("propertyValue: "+result);
-					
-		            outputKey.set(constructPropertyXml(key, new Text(result)));
-		            context.write(outputKey, null);
-				}
-	        }
-	    }
-
-	    public static String constructPropertyXml(Text title, Text abstrakt) {
-	        StringBuilder sb = new StringBuilder();
-	        sb.append("<property><title>").append(title)
-	        .append("</title><abstrakt>").append(abstrakt)
-	        .append("</abstrakt></property>");
-	        return sb.toString();
-	    }
-	}
-	
+	//Drbnut to rozdelovanie do map reduce
+	//Nepouzivat xmloutputformat ale iba text output format, tam to nejak logicky rozdelit, napr cez tab alebo take daco
 	
 	@SuppressWarnings("unused")
 	public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException{
@@ -230,7 +199,7 @@ public class WikiParser {
             job.setOutputValueClass(Text.class);
 
             job.setMapperClass(WikiParser.Map.class);
-            job.setReducerClass(WikiParser.Reduce.class);
+            job.setReducerClass(Reducer.class);
 
             job.setInputFormatClass(XmlInputFormat1.class);
             job.setOutputFormatClass(TextOutputFormat.class);         

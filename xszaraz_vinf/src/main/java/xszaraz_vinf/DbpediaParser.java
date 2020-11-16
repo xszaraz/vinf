@@ -50,23 +50,11 @@ public class DbpediaParser {
 	    	title = summarizer.SummarizeTitle(texts[0]);	
 	    	//texts[2] = abstrakt
 	    	abstrakt = summarizer.SummarizeAbstract(texts[2]);
-	        System.out.println("title: " + title + ", abstrakt: " + abstrakt);
-	        context.write(new Text(title), new Text(abstrakt));
+
+	        context.write(new Text(title.trim()), new Text(abstrakt.trim()));
 	    }		
 	}
 	
-	public static class Reduce extends Reducer<Text, Text, Text, Text> {
-    
-	    public void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
-	    	String result="";
-	        for (Text value : values) {
-		        result += value;	
-	        }
-	        
-	        context.write(key, new Text(result));	
-	    }
-	}
-
 	    public static void main(String[] args) throws Exception {
 	        Configuration conf = new Configuration();
 	        Job job = new Job(conf, "Read a File");
@@ -75,10 +63,10 @@ public class DbpediaParser {
 	        job.setOutputValueClass(Text.class);
 
 	        job.setMapperClass(DbpediaParser.Map.class);
-	        job.setReducerClass(DbpediaParser.Reduce.class);
+	        job.setReducerClass(Reducer.class);
 
 	        job.setInputFormatClass(TextInputFormat.class);
-	        job.setOutputFormatClass(XMLOutputFormat.class);
+	        job.setOutputFormatClass(TextOutputFormat.class);
 
 	        FileInputFormat.addInputPath(job, new Path("D:\\STU_FIIT\\Inzinierske_studium\\3semester\\VINF\\Untitled-2.nt"));
 	        FileOutputFormat.setOutputPath(job, new Path("D:\\STU_FIIT\\Inzinierske_studium\\3semester\\VINF\\dbpediaoutput"));
