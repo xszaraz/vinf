@@ -138,7 +138,6 @@ public class WikiParser {
 	    }
 	}
 
-
 	public static class Map extends Mapper<LongWritable, Text,Text, Text> {
 	    @Override
 	    protected void map(LongWritable key, Text value, Mapper.Context context) throws IOException, InterruptedException {
@@ -176,9 +175,13 @@ public class WikiParser {
 	    			abstrakt = summarizer.Summarize(texts[0], 1024);
 	    			    			
 	    			propertyName = propertyName.trim() + "\t";
-	    	    	abstrakt = abstrakt.trim() + "\t";
-	    			
-					context.write(new Text(propertyName), new Text(abstrakt));
+	    	    	abstrakt = abstrakt.trim();
+	    	    	
+	    	    	if (abstrakt != "" && !abstrakt.startsWith("Redirect ")) {
+	    	    		abstrakt = abstrakt + "\t";
+	    	    		System.out.println(propertyName + abstrakt);
+	    	    		context.write(new Text(propertyName), new Text(abstrakt));
+	    	    	}
 				}            
 	        }
 	        catch(Exception e){
@@ -186,9 +189,6 @@ public class WikiParser {
 	        }
 	    }
 	}
-	
-	//Drbnut to rozdelovanie do map reduce
-	//Nepouzivat xmloutputformat ale iba text output format, tam to nejak logicky rozdelit, napr cez tab alebo take daco
 	
 	@SuppressWarnings("unused")
 	public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException{

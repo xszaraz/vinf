@@ -143,9 +143,9 @@ public class WikiTextSummarize {
 	
 	public String Summarize(String text, int maxSummarySize)
 	{
-		System.out.println("WIKIPEDIA PARSING");
+
 		//regexy na zbavenie sa veci, ktore ma nezaujimaju
-		text = text.replaceAll("==.*==", "").replaceAll("\\&lt\\;\\!\\-\\-[[[a-z]*[A-Z]*[0-9]*\\_*\\/*\\ *\\'*\\\"*\\=*\\-*\\–*á*Á*é*É*í*Í*¾*¼*š*Š*è*È***ž*Ž*ý*Ý*\\;*\\:*\\.*\\,*\\!*\\?*\\@*\\#*\\$*\\%*\\&*\\^*\\**\\(*\\)*\\~*\\]\\[*]*\\|*]*\\-\\-\\&gt\\;","").replace("[...] ", "").replace("&quot", "\"")
+		text = text.replaceAll("==.*==", "").replaceAll("\\&lt\\;\\!\\-\\-[[[a-z]*[A-Z]*[0-9]*\\_*\\/*\\ *\\'*\\\"*\\=*\\-*\\–*á*Á*é*É*í*Í*¾*¼*š*Š*è*È*ž*Ž*ý*Ý*\\;*\\:*\\.*\\,*\\!*\\?*\\@*\\#*\\$*\\%*\\&*\\^*\\**\\(*\\)*\\~*\\]\\[*]*\\|*]*\\-\\-\\&gt\\;","").replace("[...] ", "").replace("&quot", "\"")
 				.replaceAll("\\{\\{[[[a-z]*[A-Z]*[0-9]*\\_*\\/*\\ *\\'*\\\"*\\=*\\-*\\–*á*Á*é*É*í*Í*¾*¼*š*Š*è*È***ž*Ž*ý*Ý*\\;*\\:*\\.*\\,*\\!*\\?*\\@*\\#*\\$*\\%*\\&*\\^*\\**\\(*\\)*\\~*\\]\\[*]*\\|*]*\\}\\}", "")
 				.replaceAll("\\([[a-z]*[A-Z]*[0-9]*\\_*\\/*\\ *\\'*\\\"*\\=*\\-*\\–*á*Á*é*É*í*Í*¾*¼*š*Š*è*È***ž*Ž*ý*Ý*\\;*\\:*\\.*\\,*\\!*\\?*\\@*\\#*\\$*\\%*\\&*\\^*\\**\\*\\~*]*\\)\\|[[a-z]*[A-Z]*[0-9]*\\/*\\ *\\'*\\\"*\\=*\\-*\\–*á*Á*é*É*í*Í*¾*¼*š*Š*è*È***ž*Ž*ý*Ý*\\;*\\:*\\.*\\,*\\!*\\?*\\@*\\#*\\$*\\%*\\&*\\^*\\**\\*\\~*]*\\]\\]",  "")					 
 				.replaceAll("\\|[[a-z]*[A-Z]*[0-9]*\\_*\\/*\\ *\\'*\\\"*\\=*\\-*\\–*á*é*í*¾*š*è**ž*ý*\\;*\\:*\\.*\\,*\\!*\\?*\\@*\\#*\\$*\\%*\\&*\\^*\\**\\*\\~*]*\\]\\]", "]]")
@@ -155,18 +155,21 @@ public class WikiTextSummarize {
 				.replaceAll("\\&lt\\;\\/*ref[[a-z]*[A-Z]*[0-9]*\\_*\\/*\\ *\\'*\\\"*\\=*\\-*\\–*á*Á*é*É*í*Í*¾*¼*š*Š*è*È***ž*Ž*ý*Ý*\\;*\\:*\\.*\\,*\\!*\\?*\\@*\\#*\\$*\\%*\\^*\\**\\*\\~*\\[*\\]*\\(*\\)*\\|*]*\\&gt\\;", "")
 				.replaceAll("\\&lt\\;\\/*math[[a-z]*[A-Z]*[0-9]*\\_*\\/*\\ *\\'*\\\"*\\=*\\-*\\–*á*Á*é*É*í*Í*¾*¼*š*Š*è*È***ž*Ž*ý*Ý*\\;*\\:*\\.*\\,*\\!*\\?*\\@*\\#*\\$*\\%*\\^*\\**\\*\\~*\\[*\\]*\\(*\\)*\\|*]*\\&gt\\;", "")
 				.replaceAll("\\{\\{sfn[[a-z]*[A-Z*][0-9]*\\|*Ã*©*=*\"* *\\¡*â*]*\\}\\}","")
+				.replaceAll("--[[a-z]*[A-Z]*[0-9]*\\*\\/*\\ *\\'*\\\"*\\=*\\–*á*Á*é*É*í*Í*¾*¼*š*Š*è*È*ž*Ž*ý*Ý*\\;*\\:*\\.*\\,*\\!*\\?*\\@*\\#*\\$*\\%*\\&*\\^*\\**\\*\\~*\\(*\\)*\\|*]*-->", " ")
+				.replaceAll("<ref[[a-z]*[A-Z]*[0-9]*\\*\\/*\\ *\\'*\\\"*\\=*\\-*\\–*á*Á*é*É*í*Í*¾*¼*š*Š*è*È*ž*Ž*ý*Ý*\\;*\\:*\\.*\\,*\\!*\\?*\\@*\\#*\\$*\\%*\\&*\\^*\\**\\*\\~*\\{*\\}*\\(*\\)*\\|*]*><\\/ref>", "")
+				.replaceAll("<ref[[a-z]*[A-Z]*[0-9]*\\*\\/*\\ *\\'*\\\"*\\=*\\-*\\–*á*Á*é*É*í*Í*¾*¼*š*Š*è*È*ž*Ž*ý*Ý*\\;*\\:*\\.*\\,*\\!*\\?*\\@*\\#*\\$*\\%*\\&*\\^*\\**\\*\\~*\\{*\\}*\\(*\\)*\\|*]*\\/>", "")
+				.replaceAll("<ref[[a-z]*[A-Z]*[0-9]*\\*\\/*\\ *\\'*\\\"*\\=*\\-*\\–*á*Á*é*É*í*Í*¾*¼*š*Š*è*È*ž*Ž*ý*Ý*\\;*\\:*\\.*\\,*\\!*\\?*\\@*\\#*\\$*\\%*\\&*\\^*\\**\\*\\~*\\{*\\}*\\(*\\)*\\|*]*>", "")
+				.replaceAll("<gallery[ *[a-z]*[A-Z]*[0-9]*\\\"*\\.*\\=*\\–*á*Á*é*É*í*Í*¾*¼*š*Š*è*È*ž*Ž*ý*Ý*\\;*\\:*\\\\,*\\!*\\?*\\@*\\#*\\$*\\%*\\&*\\^*\\**\\*\\~*\\{*\\}*\\(*\\)*\\|*]*]*><\\/gallery>", "")
+				.replaceAll("<center[ *[a-z]*[A-Z]*[0-9]*\\\"*\\.*\\=*\\–*á*Á*é*É*í*Í*¾*¼*š*Š*è*È*ž*Ž*ý*Ý*\\;*\\:*\\\\,*\\!*\\?*\\@*\\#*\\$*\\%*\\&*\\^*\\**\\*\\~*\\{*\\}*\\(*\\)*\\|*]*]*><\\/center>", "")
 				.replace("() ", "").replace("[", "").replace("]","").replaceAll("p\\.\\ [0-9]*\\.", "p*.").replace("i.e.", "i*e*")/**/;
 
 		String[] textSentences = text.split("\n");
 		String cleanedText = "";
-		
-		System.out.println("text: ");
-		
+				
 		//zbavim sa infoboxu
 		for (String sentence : textSentences) {
 			sentence = sentence.replaceAll("^!", "|");
-			System.out.println(sentence);
-			if (!sentence.contains("|") & !sentence.contains("Infobox")) 
+			if (!sentence.contains("|") & !sentence.contains("Infobox") && !sentence.contains("http") && !sentence.contains("{{")) 
 			{
 				cleanedText = cleanedText + "\n"+ sentence;
 			}
@@ -176,7 +179,9 @@ public class WikiTextSummarize {
 		cleanedText = cleanedText.replace(".", ". ").replace("*", "").replace("'''","")
 				.replace("''","").replace("--&gt", "").replace(";","").replace("&lt!--", "").replace("&lt;/ref", "").
 				replaceAll("&gt;", "").replace("&lt/ref&gt","").replace("&ltref&gt", "").replace("{{cite journal", "").
-				replace("\n","").replace("\r", "").replace("&ltblockquote&gt","")/**/;
+				replace("\n","").replace("\r", "").replace("&ltblockquote&gt","").replace("</ref>", "")
+				.replace("<small>", "").replace("</small>","").replaceAll("--+", "").replace("<ref>", "").replaceAll("<br *\\/>", "").replace("<br>", "")
+				.replaceAll("__+TOC__+", "").replace("__+NOTOC__+", "")/**/;
 	
 		//zbavim sa oznaceni skratiek, robim to kvoli tomu, aby som mohol rozdelit text na vety podla .
 		cleanedText = cleanedText.replace("Mr.", "Mr").replace("Ms.", "Ms").replace("Dr.", "Dr").replace("Jan.", "Jan").replace("Feb.", "Feb")
@@ -214,9 +219,7 @@ public class WikiTextSummarize {
 	
 		//znaky ktore som povodne menil aby som mohol rozdelit vetu bodka ., vratim na povodne
 		summary = summary.replace("i*e*", "i.e.").replace(". ", ".").replace(".  ", ". ").replaceAll("\\ +", " ");
-		
-		System.out.println("Result from parsing: "+summary);
-		
+	
 		return summary;	
 	}
 }
