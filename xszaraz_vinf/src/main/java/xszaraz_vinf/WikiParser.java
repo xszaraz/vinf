@@ -167,15 +167,18 @@ public class WikiParser {
 	            reader.close();
 	            
 	            String textToBeSplitted = "";
-		    	String result = "";
+		    	String abstrakt = "";
 
 				if (!propertyValue.contains("#REDIRECT")) {				
 	                textToBeSplitted = propertyValue.replaceAll("==\\ *See also\\ *==", "==See also==");
 	                //splitnem text podla See also, pretoze pod See also su iba referencie co ma pri abstrakte nezaujima
 	    			String[] texts = textToBeSplitted.split("==See also=="); 
-	    			result = summarizer.Summarize(texts[0], 2048);
+	    			abstrakt = summarizer.Summarize(texts[0], 1024);
 	    			    			
-					context.write(new Text(propertyName.trim()), new Text(result.trim()));
+	    			propertyName = propertyName.trim() + "\t";
+	    	    	abstrakt = abstrakt.trim() + "\t";
+	    			
+					context.write(new Text(propertyName), new Text(abstrakt));
 				}            
 	        }
 	        catch(Exception e){
@@ -204,7 +207,7 @@ public class WikiParser {
             job.setInputFormatClass(XmlInputFormat1.class);
             job.setOutputFormatClass(TextOutputFormat.class);         
 
-            FileInputFormat.addInputPath(job, new Path("D:\\STU_FIIT\\Inzinierske_studium\\3semester\\VINF\\test.xml"));
+            FileInputFormat.addInputPath(job, new Path("D:\\STU_FIIT\\Inzinierske_studium\\3semester\\VINF\\enwiki-latest-pages-articles.xml"));
             FileOutputFormat.setOutputPath(job, new Path("D:\\STU_FIIT\\Inzinierske_studium\\3semester\\VINF\\WikiOutput"));
 
             job.waitForCompletion(true);

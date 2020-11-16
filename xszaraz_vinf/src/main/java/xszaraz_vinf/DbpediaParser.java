@@ -51,7 +51,10 @@ public class DbpediaParser {
 	    	//texts[2] = abstrakt
 	    	abstrakt = summarizer.SummarizeAbstract(texts[2]);
 
-	        context.write(new Text(title.trim()), new Text(abstrakt.trim()));
+	    	title = title.trim() + "\t";
+	    	abstrakt = abstrakt.trim() + "\t";
+	    	
+	        context.write(new Text(title), new Text(abstrakt));
 	    }		
 	}
 	
@@ -68,7 +71,7 @@ public class DbpediaParser {
 	        job.setInputFormatClass(TextInputFormat.class);
 	        job.setOutputFormatClass(TextOutputFormat.class);
 
-	        FileInputFormat.addInputPath(job, new Path("D:\\STU_FIIT\\Inzinierske_studium\\3semester\\VINF\\Untitled-2.nt"));
+	        FileInputFormat.addInputPath(job, new Path("D:\\STU_FIIT\\Inzinierske_studium\\3semester\\VINF\\shortabstract_en.nt"));
 	        FileOutputFormat.setOutputPath(job, new Path("D:\\STU_FIIT\\Inzinierske_studium\\3semester\\VINF\\dbpediaoutput"));
 	        
 	        job.setJarByClass(DbpediaParser.class);     
