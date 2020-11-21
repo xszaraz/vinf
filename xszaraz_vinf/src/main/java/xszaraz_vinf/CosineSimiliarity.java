@@ -69,17 +69,6 @@ public class CosineSimiliarity {
         }
 
         return ((vectAB) / (Math.sqrt(vectA) * Math.sqrt(vectB)));
-    }
-
-    public static void main(String[] args) throws IOException {
-    	CosineSimiliarity cs = new CosineSimiliarity();
-
-    	String text1 = "";
-    	String text2 = "";
-    	
-        double score = cs.score(text1, text2);
-        System.out.println("Cosine similarity score = " + score);
-    }
-	
+    }	
 }
 

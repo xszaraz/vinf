@@ -203,7 +203,10 @@ public class WikiTextSummarize {
 		String[] sentences = getSentences(iterator, cleanedText);
 		
 		//najdem si vety, ktore obsahuju slovo, ktore sa v texte vyskytuje najviac
-		List<String> matchedSentence = search(sentences, sortedMap.get(sortedMap.size()-1));
+		List<String> matchedSentence = new ArrayList<String>();
+		if (sortedMap.size() > 0) {
+			matchedSentence = search(sentences, sortedMap.get(sortedMap.size()-1));
+		}
 		
 		String summary = "";
 		

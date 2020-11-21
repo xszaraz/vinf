@@ -32,7 +32,6 @@ import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 
 import java.io.File;
 
-
 public class DbpediaParser {
 
 	public static DbpediaTextSummarize summarizer = new DbpediaTextSummarize();

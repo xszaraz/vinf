@@ -172,17 +172,19 @@ public class WikiParser {
 	                textToBeSplitted = propertyValue.replaceAll("==\\ *See also\\ *==", "==See also==");
 	                //splitnem text podla See also, pretoze pod See also su iba referencie co ma pri abstrakte nezaujima
 	    			String[] texts = textToBeSplitted.split("==See also=="); 
-	    			abstrakt = summarizer.Summarize(texts[0], 1024);
-	    			    			
-	    			propertyName = propertyName.trim() + "\t";
-	    	    	abstrakt = abstrakt.trim();
-	    	    	
-	    	    	if (abstrakt != "" && !abstrakt.startsWith("Redirect ")) {
-	    	    		abstrakt = abstrakt + "\t";
-	    	    		System.out.println(propertyName + abstrakt);
-	    	    		context.write(new Text(propertyName), new Text(abstrakt));
-	    	    	}
-				}            
+	    			if (texts.length>0) {
+		    			abstrakt = summarizer.Summarize(texts[0], 1024);
+		    			    			
+		    			propertyName = propertyName.trim() + "\t";
+		    	    	abstrakt = abstrakt.trim();
+		    	    	
+		    	    	if (abstrakt != "" && !abstrakt.startsWith("Redirect ") && !abstrakt.startsWith("redirect")) {
+		    	    		abstrakt = abstrakt + "\t";
+		    	    		System.out.println(propertyName + abstrakt);
+		    	    		context.write(new Text(propertyName), new Text(abstrakt));
+		    	    	}
+					}            
+				}
 	        }
 	        catch(Exception e){
 	            throw new IOException(e);
