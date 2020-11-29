@@ -129,15 +129,19 @@ public class CompareTwoFiles {
 		
 		job.setJarByClass(CompareTwoFiles.class);
 		
-		FileOutputFormat.setOutputPath(job, new Path("D:\\STU_FIIT\\Inzinierske_studium\\3semester\\VINF\\comparisionOutput")); //args[2]
+        String path1 = "D:\\STU_FIIT\\Inzinierske_studium\\3semester\\VINF\\dbpediaOut"; //spracovany dbpedia dump
+        String path2 = "D:\\STU_FIIT\\Inzinierske_studium\\3semester\\VINF\\wikiOut"; //spracovany wiki xml dump
+        String path3 = "D:\\STU_FIIT\\Inzinierske_studium\\3semester\\VINF\\comparisionOutput"; //output direction
+		
+		FileOutputFormat.setOutputPath(job, new Path(args[2]));
 		
 		job.setReducerClass(CompareTwoFiles.Reduce.class);
 		
 		job.setOutputKeyClass(Text.class);
 		job.setOutputValueClass(Text.class);
 		
-		MultipleInputs.addInputPath(job, new Path("D:\\STU_FIIT\\Inzinierske_studium\\3semester\\VINF\\dbpediaOut"), TextInputFormat.class, CompareTwoFiles.Map.class); //args[0]
-		MultipleInputs.addInputPath(job, new Path("D:\\STU_FIIT\\Inzinierske_studium\\3semester\\VINF\\wikiOut"), TextInputFormat.class, CompareTwoFiles.Map2.class); //asrgs[1]
+		MultipleInputs.addInputPath(job, new Path(path1), TextInputFormat.class, CompareTwoFiles.Map.class);
+		MultipleInputs.addInputPath(job, new Path(args[1]), TextInputFormat.class, CompareTwoFiles.Map2.class);
 		
 		job.waitForCompletion(true);
 	}

@@ -207,10 +207,13 @@ public class WikiParser {
             job.setReducerClass(Reducer.class);
 
             job.setInputFormatClass(XmlInputFormat1.class);
-            job.setOutputFormatClass(TextOutputFormat.class);         
+            job.setOutputFormatClass(TextOutputFormat.class);        
+            
+	        String path1 = "D:\\STU_FIIT\\Inzinierske_studium\\3semester\\VINF\\enwiki-latest-pages-articles.xml"; //wiki xml dump
+	        String path2 = "D:\\STU_FIIT\\Inzinierske_studium\\3semester\\VINF\\wikiOutput"; //output direction
 
-            FileInputFormat.addInputPath(job, new Path(args[0]));
-            FileOutputFormat.setOutputPath(job, new Path(args[1]));
+            FileInputFormat.addInputPath(job, new Path(path1));
+            FileOutputFormat.setOutputPath(job, new Path(path2));
 
             job.waitForCompletion(true);
 	}
