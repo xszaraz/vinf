@@ -70,8 +70,8 @@ public class DbpediaParser {
 	        job.setInputFormatClass(TextInputFormat.class);
 	        job.setOutputFormatClass(TextOutputFormat.class);
 
-	        FileInputFormat.addInputPath(job, new Path("D:\\STU_FIIT\\Inzinierske_studium\\3semester\\VINF\\shortabstract_en.nt"));
-	        FileOutputFormat.setOutputPath(job, new Path("D:\\STU_FIIT\\Inzinierske_studium\\3semester\\VINF\\dbpediaoutput"));
+	        FileInputFormat.addInputPath(job, new Path(args[0]));
+	        FileOutputFormat.setOutputPath(job, new Path(args[1]));
 	        
 	        job.setJarByClass(DbpediaParser.class);     
 	        job.waitForCompletion(true);

@@ -173,7 +173,7 @@ public class WikiParser {
 	                //splitnem text podla See also, pretoze pod See also su iba referencie co ma pri abstrakte nezaujima
 	    			String[] texts = textToBeSplitted.split("==See also=="); 
 	    			if (texts.length>0) {
-		    			abstrakt = summarizer.Summarize(texts[0], 1024);
+		    			abstrakt = summarizer.Summarize(texts[0], 512);
 		    			    			
 		    			propertyName = propertyName.trim() + "\t";
 		    	    	abstrakt = abstrakt.trim();
@@ -209,8 +209,8 @@ public class WikiParser {
             job.setInputFormatClass(XmlInputFormat1.class);
             job.setOutputFormatClass(TextOutputFormat.class);         
 
-            FileInputFormat.addInputPath(job, new Path("D:\\STU_FIIT\\Inzinierske_studium\\3semester\\VINF\\enwiki-latest-pages-articles.xml"));
-            FileOutputFormat.setOutputPath(job, new Path("D:\\STU_FIIT\\Inzinierske_studium\\3semester\\VINF\\WikiOutput"));
+            FileInputFormat.addInputPath(job, new Path(args[0]));
+            FileOutputFormat.setOutputPath(job, new Path(args[1]));
 
             job.waitForCompletion(true);
 	}

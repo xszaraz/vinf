@@ -213,11 +213,10 @@ public class WikiTextSummarize {
 		//vety, ktore obsahovali dane slovo vratim a kontrolujem ci sa mi este mestia do vyhradenej velkosti alebo nie 
 		for(String sentence : matchedSentence)
 		{
-			if(summary.length() + sentence.length() > maxSummarySize)
+			if(summary.length() + sentence.length() <= maxSummarySize)
 			{
-				break;
-			}
-			summary = summary + sentence;			
+				summary = summary + sentence;
+			}		
 		}									
 	
 		//znaky ktore som povodne menil aby som mohol rozdelit vetu bodka ., vratim na povodne
