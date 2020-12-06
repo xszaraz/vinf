@@ -154,7 +154,7 @@ public class WikiParser {
 	                case XMLStreamConstants.START_ELEMENT: //START_ELEMENT:
 	                    currentElement = reader.getLocalName();
 	                    break;
-	                case XMLStreamConstants.CHARACTERS: //CHARACTERS:
+	                case XMLStreamConstants.CHARACTERS: //CHARACTERS: dostanem title a text, z ktoreho budem robit abstrakty
 	                    if (currentElement.equalsIgnoreCase("title")) {
 	                        propertyName += reader.getText();
 	                    } else if (currentElement.equalsIgnoreCase("text")) {
@@ -168,16 +168,19 @@ public class WikiParser {
 	            String textToBeSplitted = "";
 		    	String abstrakt = "";
 
+		    	//ak text, z ktoreho idem robit obsahuje #REDIRECT, tak ma to nezaujima a skipujem to
 				if (!propertyValue.contains("#REDIRECT")) {				
 	                textToBeSplitted = propertyValue.replaceAll("==\\ *See also\\ *==", "==See also==");
 	                //splitnem text podla See also, pretoze pod See also su iba referencie co ma pri abstrakte nezaujima
 	    			String[] texts = textToBeSplitted.split("==See also=="); 
 	    			if (texts.length>0) {
+	    				//kedze maju dlzku 512 tak chcem aby sa mi vratili iba abstrakt s maximalnou dlzkou 512
 		    			abstrakt = summarizer.Summarize(texts[0], 512);
 		    			    			
 		    			propertyName = propertyName.trim() + "\t";
 		    	    	abstrakt = abstrakt.trim();
 		    	    	
+		    	    	//ak vrateny abstrakt obsahuje slove redirect alebo je prazdny, tak ma to nezaujima a skipnem to 
 		    	    	if (abstrakt != "" && !abstrakt.startsWith("Redirect ") && !abstrakt.startsWith("redirect")) {
 		    	    		abstrakt = abstrakt + "\t";
 		    	    		System.out.println(propertyName + abstrakt);

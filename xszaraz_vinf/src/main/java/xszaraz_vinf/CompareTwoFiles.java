@@ -36,6 +36,7 @@ public class CompareTwoFiles {
 
 		@Override
 		public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
+			//dostanem titul a abstrakt zo spracovaneho suboru
 			String[] Sentences = value.toString().split("\t");
 			
 			String title = Sentences[0];
@@ -49,8 +50,9 @@ public class CompareTwoFiles {
 		
 		@Override
 		public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
+			//dostanem titul a abstrakt zo spracovaneho suboru
 			String[] Sentences = value.toString().split("\t");
-			
+		
 			String title = Sentences[0];
 			String abstrakt = Sentences[Sentences.length-1];
 			
@@ -73,11 +75,13 @@ public class CompareTwoFiles {
 		        i++;
 		    }
 		    
+		    //tu si zistim, ze ci sa dany abstrakt z dbpedie nachadza wo wikipedii 
 		    if (lines.length >= 2) {
 			    if (lines[0] != null && lines[1] != null) {	
 			    	//lines[1] abstrakt z DBpedie, lines[0] abstrakt z Wiki
 			    	score = cosineSimilarity.score(lines[1], lines[0])*100;	    
 			    	
+			    	//index, sum, SWA, SWAS, LWA, LWAS, SDA, SDAS, LDA, LDAS a average su iba premenne, ktore sluzia na statistiku
 				    index++;
 				    sum += score;
 				    if (score <= min) {
